@@ -44,5 +44,7 @@ python_version = "3.7"
 pipenv install flask
 ```
 #### 参考
+* [深入Python Flask构建Restful API 或者 慕课网 Python Flask构建可扩展的 ESTful API](https://www.os4team.cn/)
+* [labike.github.io](https://github.com/labike/labike.github.io/issues/45)
 * [mini-shop-server](https://github.com/Allen7D/mini-shop-server)
 * [flask-restful-example](https://github.com/qzq1111/flask-restful-example)
