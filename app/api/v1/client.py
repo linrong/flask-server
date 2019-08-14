@@ -10,23 +10,30 @@ from app.models.user import User
 from app.validators.forms import ClientValidator, UserEmailValidator
 
 __author__ = 'lr'
-
+'''
+	单独的创建一个client模块来处理注册,为了：
+	1.注册类型可能会有很多种包括像Email注册, 手机号码注册, 第三方注册登录等，避免创建多个不同类型的注册路由
+	2.为登录和注册提供统一的接口
+'''
 api = RedPrint('client')
 
 
 @api.route('/register', methods=['POST'])
 def create_client():
 	form = ClientValidator().validate_for_api()  # 参数校验，直接在此抛出异常，并中指代码
-	promise = {
-		ClientTypeEnum.USER_EMAIL: __register_user_by_email
+	# 创建字典，枚举对应相对函数
+    promise = {
+        ClientTypeEnum.USER_EMAIL: __register_user_by_email
 	}
-	promise[form.type.data]()
-	return RenewSuccess()
+	# 调用对应函数
+    promise[form.type.data]()
+    return RenewSuccess()
 
 
 def __register_user_by_email():
-	form = UserEmailValidator().validate_for_api()
-	User.register_by_email(form.nickname.data, form.account.data, form.secret.data)
+    form = UserEmailValidator().validate_for_api()
+    User.register_by_email(
+        form.nickname.data, form.account.data, form.secret.data)
 
 
 '''
