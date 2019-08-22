@@ -22,7 +22,8 @@ def get_token():
 	form = ClientValidator().validate_for_api()
 	promise = {
 		ClientTypeEnum.USER_EMAIL: User.verify,
-	}
+    }
+    # 判断用户是否存在并返回信息
 	identity = promise[ClientTypeEnum(form.type.data)](form.account.data, form.secret.data)
 	# Token生成
 	expiration = current_app.config['TOKEN_EXPIRATION']

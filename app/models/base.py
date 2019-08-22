@@ -43,13 +43,13 @@ class Query(BaseQuery):
 		if not rv:
 			raise NotFound()
 		return rv
-
+    
 	def get_or_404(self, ident):
 		rv = self.get(ident)  # 查询主键
 		if not rv:
 			raise NotFound()
 		return rv
-
+    # 重写修改错误的返回格式，此方法BaseQuery自带的
 	def first_or_404(self):
 		rv = self.first()
 		if not rv:
