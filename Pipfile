@@ -9,6 +9,8 @@ autopep8 = "*"
 [packages]
 flask = "*"
 flask-wtf = "*"
+flask-httpauth = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.7"
