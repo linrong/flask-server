@@ -15,7 +15,7 @@ __author__ = 'lr'
 	用于参数校验,Flask为我们提供了一个wtforms的扩展专门来处理参数校验
 '''
 
-
+# BaseValidator的init中进行数据获取
 class ClientValidator(BaseValidator):
     # 账号
     account = StringField(validators=[DataRequired(message='Not Null'),

@@ -19,6 +19,7 @@ api = RedPrint('token')
 
 @api.route('', methods=['POST'])
 def get_token():
+    # 获取token需要同时上传账号，密码，账号类型，即登录,数据的获取在ClientValidator的父类的init
 	form = ClientValidator().validate_for_api()
 	promise = {
 		ClientTypeEnum.USER_EMAIL: User.verify,

@@ -14,6 +14,11 @@ __author__ = 'lr'
 
 api = RedPrint('user')
 
+"""
+装饰器的使用(https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584)
+装饰器的代码执行顺序(https://www.jianshu.com/p/a58d6f71b1ce)
+"""
+# 因为auth从app.libs.token_auth模块导入，所以auth.verify_password先于auth.login_required调用
 
 # 管理员
 @api.route('/<int:uid>', methods=['GET'])
