@@ -62,8 +62,8 @@ def verify_auth_token(token):
         raise AuthFailed(msg='token is expired', error_code=1003)
     uid = data['uid']
     ac_type = data['type']
-    scope = data['scope']
-    # 可以获取要访问的视图函数
+    scope = data['scope'] # token处获得权限组信息
+    # 可以获取要访问的视图函数,进行权限判断
     allow = is_in_scope(scope, request.endpoint)
     if not allow:
         raise ForbiddenException()

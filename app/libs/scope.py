@@ -10,7 +10,9 @@ class Scope:
 	allow_module = []
 	forbidden = []
 
+    # __add__方法(即+)重写
 	def __add__(self, other):
+		# 去重
 		self.allow_api = list(set(self.allow_api + other.allow_api))
 		self.allow_module = list(set(self.allow_module + other.allow_module))
 		self.forbidden = list(set(self.forbidden + other.forbidden))
@@ -23,6 +25,7 @@ class UserScope(Scope):
 				 'v1.user+super_update_user']
 
 	def __init__(self):
+		# 利用内置的__add__方法叫做运算符重载
 		self + AdminScope()
 
 
@@ -44,7 +47,7 @@ class SuperScope(Scope):
 
 
 def is_in_scope(scope, endpoint):
-	scope = globals()[scope]()
+	scope = globals()[scope]() # 使用字符串scope动态创建对象scope：globals()函数返回一个dict, 我们的模块下的所有变量和对象都是dict的key, 包括UserScope和AdminScope等对象
 	splits = endpoint.split('+')
 	red_name = splits[0]  # v1.*
 	if endpoint in scope.forbidden:

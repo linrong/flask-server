@@ -15,7 +15,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String(24), unique=True, nullable=False)
     nickname = Column(String(24), unique=True)
-    # 区分管理员和普通用户，1为普通用户
+    # 区分管理员和普通用户，1为普通用户，2为管理员
     auth = Column(SmallInteger, default=1)
     _password = Column('password', String(100))
 
@@ -47,7 +47,7 @@ class User(Base):
         user = User.query.filter_by(email=email).first_or_404()
         if not user.check_password(password):
             raise AuthFailed()
-        scope = 'AdminScope' if user.auth == 2 else 'UserScope'
+        scope = 'AdminScope' if user.auth == 2 else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
         return {'uid': user.id, 'scope': scope}
 
     def check_password(self, raw):

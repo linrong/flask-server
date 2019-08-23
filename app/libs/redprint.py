@@ -40,6 +40,7 @@ class RedPrint:
             url_prefix = '/' + self.name
         # python的自动拆包
         for f, rule, options in self.mound:
+            # 将endpoint返回的格式拼装成v1.redprint_name + view_func,在进行权限判断时使用
             endpoint = self.name + '+' + options.pop("endpoint", f.__name__)
             # 将视图函数注册到蓝图上来
             bp.add_url_rule(url_prefix + rule, endpoint, f, **options)
