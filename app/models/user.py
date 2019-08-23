@@ -19,8 +19,11 @@ class User(Base):
     auth = Column(SmallInteger, default=1)
     _password = Column('password', String(100))
 
+    # model中增加keys方法是为了在序列化时使用dict(xxx)方式序列化model
+    # __getitem__也要加，不过统一加在父类Base中
+    # 当keys返回的是tuple并且只有一个属性时记着别忘了加,，否则会得到这样一个错误Object has no attribute 'n'.
     def keys(self):
-        return ['id', 'email', 'nickname', 'auth']
+        return ['id', 'email', 'nickname', 'auth'] # 返回的类型要是tuple,或者list等序列类型
 
     @property
     def password(self):

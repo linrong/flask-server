@@ -17,6 +17,7 @@ class Success(APIException):
 
 	def __init__(self, data=None, code=None, error_code=None, msg=None):
 		if data:
+			# 数据进行序列化，会调用app.py中重写的JSONEncoder
 			self.data = jsonify(data)
 		super(Success, self).__init__(code, error_code, msg)
 

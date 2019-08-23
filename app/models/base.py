@@ -75,7 +75,8 @@ class Base(db.Model):
 
 	def __init__(self):
 		self.create_time = int(datetime.now().timestamp())
-
+    
+	# 用于序列化时使用dict(xxx)方式序列化model
 	def __getitem__(self, item):
 		return getattr(self, item)
 
