@@ -22,11 +22,12 @@ def create_app():
 
 
 def register_plugin(app):
-    # 在user model中用到了sqlalchemy这个第三方package, 所有的第三方package都需要注册到Flask核心对象上才会起作用,创建一个函数用来将其注册到Flask核心对象上
+    # 在model中用到了sqlalchemy这个第三方package, 所有的第三方package都需要注册到Flask核心对象上才会起作用,创建一个函数用来将其注册到Flask核心对象上
     from app.models.base import db
     db.init_app(app)
     # db.create_all()方法只能在Flask核心对象的上下文栈中才会起作用. 所以我们要用with调用Flask核心对象的app_context()方法将其推入Flask核心对象的上下文栈中
     with app.app_context():
+        # 如果数据库表已经存在于数据库中, 那么 db.create_all() 不会创建或更新这个表
         db.create_all()
 
 
