@@ -2,7 +2,7 @@
 """
   Created by lr on 2019/8/9.
 """
-from app.libs.error_code import Success
+from app.libs.success_message  import Success
 from app.libs.redprint import RedPrint
 from app.models.theme import Theme
 from app.validators.params import IDCollection, IDMustBePositiveInt
