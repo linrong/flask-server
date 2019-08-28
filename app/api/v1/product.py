@@ -25,3 +25,15 @@ def get_all_in_category():
 	id = IDMustBePositiveInt().validate_for_api().id.data
 	products = Product.get_product_by_category_id(id=id)
 	return Success(products)
+
+@api.route('/<id>', methods=['GET'])
+def get_one(id):
+	id = IDMustBePositiveInt().validate_for_api().id.data
+	product = Product.get_product_detail(id=id)
+	return Success(product)
+
+@api.route('/<id>', methods=['DELETE'])
+def delete_one(id):
+	id = IDMustBePositiveInt().validate_for_api().id.data
+	product = Product.get_product_detail(id=id)
+	return Success()
