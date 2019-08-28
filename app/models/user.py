@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.libs.error_code import AuthFailed
 from app.models.base import Base, db
+from app.models.user_address import UserAddress
 
 __author__ = 'lr'
 
@@ -33,6 +34,20 @@ class User(Base):
     def password(self, raw):
         self._password = generate_password_hash(raw)
 
+    def save_address(self, address_info):
+		with db.auto_commit():
+			address = UserAddress.query.filter_by(user_id=self.id).first()
+			if not address:
+				address = UserAddress()
+			address.user_id = self.id
+			address.name = address_info.name
+			address.mobile = address_info.mobile
+			address.province = address_info.province
+			address.city = address_info.city
+			address.country = address_info.country
+			address.detail = address_info.detail
+			db.session.add(address)
+
     @staticmethod
     def register_by_email(nickname, account, secret):
         with db.auto_commit():
@@ -47,9 +62,9 @@ class User(Base):
         user = User.query.filter_by(email=email).first_or_404()
         if not user.check_password(password):
             raise AuthFailed()
-        scope = 'AdminScope' if user.auth == 2 else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
-        return {'uid': user.id, 'scope': scope}
-
+            scope = 'AdminScope' if user.auth == 2 else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
+		return {'uid': user.id, 'scope': scope}
+ 
     def check_password(self, raw):
         if not self._password:
             return False

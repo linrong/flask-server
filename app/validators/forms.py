@@ -2,6 +2,8 @@
 """
   Created by lr on 2019/8/9.
 """
+from collections import namedtuple
+
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired, length, Email, Regexp, ValidationError
 
@@ -14,6 +16,7 @@ __author__ = 'lr'
 '''
 	用于参数校验,Flask为我们提供了一个wtforms的扩展专门来处理参数校验
 '''
+Address = namedtuple('Address', ['name', 'mobile', 'province', 'city', 'country', 'detail'])
 
 # BaseValidator的init中进行数据获取
 class ClientValidator(BaseValidator):
@@ -59,3 +62,23 @@ class UserEmailValidator(ClientValidator):
 
 class BookSearchValidator(BaseValidator):
     q = StringField(validators=[DataRequired()])
+
+
+class AddressNew(BaseValidator):
+	name = StringField(validators=[DataRequired()])
+	mobile = StringField(validators=[
+		DataRequired(),
+		length(min=11, max=11, message='手机号为11个数字'),
+		Regexp(r'^1(3|4|5|7|8)[0-9]\d{8}$')
+	])
+	province = StringField(validators=[DataRequired()])
+	city = StringField(validators=[DataRequired()])
+	country = StringField(validators=[DataRequired()])
+	detail = StringField()
+
+ 	@property
+	def data(self):
+		return Address(
+			self.name.data, self.mobile.data, self.province.data,
+			self.city.data, self.country.data, self.detail.data
+		)
