@@ -22,12 +22,12 @@ api = RedPrint('client')
 def create_client():
 	form = ClientValidator().validate_for_api()  # 参数校验，直接在此抛出异常，并中指代码
 	# 创建字典，枚举对应相对函数
-    promise = {
-        ClientTypeEnum.USER_EMAIL: __register_user_by_email
+	promise = {
+		ClientTypeEnum.USER_EMAIL: __register_user_by_email	
 	}
 	# 调用对应函数
-    promise[form.type.data]()
-    return RenewSuccess()
+	promise[form.type.data]()
+	return RenewSuccess()
 
 
 def __register_user_by_email():

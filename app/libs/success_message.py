@@ -1,12 +1,12 @@
 # _*_ coding: utf-8 _*_
 """
-  Created by linrong on 2019/08/28.
+  Created by lr on 2019/08/28.
 """
 from flask import json
 from app.libs.utils import jsonify
 from app.libs.error import APIException
 
-__author__ = 'linrong'
+__author__ = 'lr'
 
 
 class Success(APIException):
@@ -15,12 +15,12 @@ class Success(APIException):
 	data = None  # 结果可以是{} 或 []
 	msg = 'fetch success'
 
- 	def __init__(self, data=None, code=None, error_code=None, msg=None):
+	def __init__(self, data=None, code=None, error_code=None, msg=None):
 		if data:
 			self.data = jsonify(data)
 		super(Success, self).__init__(code, error_code, msg)
 
- 	def get_body(self, environ=None):
+	def get_body(self, environ=None):
 		body = dict(
 			error_code=self.error_code,
 			data=self.data

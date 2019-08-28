@@ -17,7 +17,7 @@ __author__ = 'lr'
 class User(Base):
     id = Column(Integer, primary_key=True)
     openid = Column(String(50), unique=True)
-	email = Column(String(24), unique=True)
+    email = Column(String(24), unique=True)
     nickname = Column(String(24), unique=True)
     extend = Column(String(255))
     # 区分管理员和普通用户，1为普通用户，2为管理员
@@ -39,18 +39,18 @@ class User(Base):
         self._password = generate_password_hash(raw)
 
     def save_address(self, address_info):
-		with db.auto_commit():
-			address = UserAddress.query.filter_by(user_id=self.id).first()
-			if not address:
-				address = UserAddress()
-			address.user_id = self.id
-			address.name = address_info.name
-			address.mobile = address_info.mobile
-			address.province = address_info.province
-			address.city = address_info.city
-			address.country = address_info.country
-			address.detail = address_info.detail
-			db.session.add(address)
+        with db.auto_commit():
+            address = UserAddress.query.filter_by(user_id=self.id).first()
+            if not address:
+                address = UserAddress()
+            address.user_id = self.id
+            address.name = address_info.name
+            address.mobile = address_info.mobile
+            address.province = address_info.province
+            address.city = address_info.city
+            address.country = address_info.country
+            address.detail = address_info.detail
+            db.session.add(address)
 
     @staticmethod
     def register_by_email(nickname, account, secret):
@@ -63,11 +63,11 @@ class User(Base):
 
     @staticmethod
     def register_by_wx(account):
-		with db.auto_commit():
-			user = User()
-			user.openid = account
-			db.session.add(user)
-		return User.query.filter_by(openid=account).first()
+        with db.auto_commit():
+            user = User()
+            user.openid = account
+            db.session.add(user)
+        return User.query.filter_by(openid=account).first()
 
     @staticmethod
     def verify_by_email(email, password):
@@ -75,19 +75,19 @@ class User(Base):
         if not user.check_password(password):
             raise AuthFailed()
         scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
-		return {'uid': user.id, 'scope': scope}
+        return {'uid': user.id, 'scope': scope}
 
     @staticmethod
-	def verify_by_wx(code, *args):
-		ut = UserToken(code)
-		wx_result = ut.get()
-		openid = wx_result['openid']
-		user = User.query.filter_by(openid=openid).first()
-		if not user:
-			user = User.register_by_wx(openid)
-		scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope'
-		return {'uid': user.id, 'scope': scope}
- 
+    def verify_by_wx(code, *args):
+        ut = UserToken(code)
+        wx_result = ut.get()
+        openid = wx_result['openid']
+        user = User.query.filter_by(openid=openid).first()
+        if not user:
+            user = User.register_by_wx(openid)
+        scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope'
+        return {'uid': user.id, 'scope': scope}
+
     def check_password(self, raw):
         if not self._password:
             return False

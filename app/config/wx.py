@@ -1,8 +1,8 @@
 # _*_ coding: utf-8 _*_
 """
-  Created by linrong on 2019/08/28.
+  Created by lr on 2019/08/28.
 """
-__author__ = 'linrong'
+__author__ = 'lr'
 
 APP_ID = 'wx551ff8259cd7339b'
 APP_SECRET = '266db382ae9842940d292e0ce021182c'

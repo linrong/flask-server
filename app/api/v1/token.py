@@ -21,20 +21,20 @@ api = RedPrint('token')
 @api.route('/user', methods=['POST'])
 def get_token():
     # 获取token需要同时上传账号，密码，账号类型，即登录,数据的获取在ClientValidator的父类的init
-	form = ClientValidator().validate_for_api()
-	promise = {
-		ClientTypeEnum.USER_EMAIL: User.verify_by_email,
-		ClientTypeEnum.USER_WX: User.verify_by_wx,
+    form = ClientValidator().validate_for_api()
+    promise = {
+        ClientTypeEnum.USER_EMAIL: User.verify_by_email,
+        ClientTypeEnum.USER_WX: User.verify_by_wx,
     }
     # 判断用户是否存在并返回信息
     # 微信登录则account为code(需要微信小程序调用wx.login接口获取), secret为空
-	identity = promise[ClientTypeEnum(form.type.data)](form.account.data, form.secret.data)
+    identity = promise[ClientTypeEnum(form.type.data)](form.account.data, form.secret.data)
 	# Token生成
-	expiration = current_app.config['TOKEN_EXPIRATION']
-	token = generate_auth_token(identity['uid'],
-								form.type.data,
-								identity['scope'],
-								expiration)
+    expiration = current_app.config['TOKEN_EXPIRATION']
+    token = generate_auth_token(identity['uid'],
+                                form.type.data,
+                                identity['scope'],
+                                expiration)
     return Success(data=token)
 
 
@@ -65,7 +65,7 @@ def get_token_info():
 
 
 def generate_auth_token(uid, ac_type, scope=None, expiration=7200):
-	"""
+    """
     生成token，将用户的id，作用域，用户类型，过期时间写入token
     :param uid: 用户id
     :param ac_type: 用户类型
@@ -73,10 +73,10 @@ def generate_auth_token(uid, ac_type, scope=None, expiration=7200):
     :param expiration: 过期时间 秒
     :return:
     """
-	s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
-	token = s.dumps({
-		'uid': uid,
-		'type': ac_type.value,
-		'scope': scope
-	})
+    s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+    token = s.dumps({
+        'uid': uid,
+        'type': ac_type.value,
+        'scope': scope
+    })
     return {'token': token.decode('ascii')}

@@ -17,7 +17,7 @@ class UserToken:
 		self.wx_app_secret = current_app.config['APP_SECRET']
 		self.wx_login_url = current_app.config['LOGIN_URL'].format(self.wx_app_id, self.wx_app_secret, self.code)
 
- 	def get(self):
+	def get(self):
 		wx_result = HTTP.get(self.wx_login_url)
 		if not wx_result:
 			# 获取session_key及openID时异常，微信内部错误
@@ -29,7 +29,7 @@ class UserToken:
 			else:
 				return wx_result
 
- 	def __process_login_error(self, wx_result):
+	def __process_login_error(self, wx_result):
 		raise WeChatException(
 			msg=wx_result['errmsg'],
 			error_code=wx_result['errcode'],

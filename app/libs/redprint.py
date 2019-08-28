@@ -9,7 +9,7 @@ __author__ = 'lr'
 
 class RedPrint:
 
-	"""
+    """
 	初始化传入视图名name
 	mount是一个存放多个视图函数的列表
 	"""
