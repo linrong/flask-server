@@ -11,6 +11,9 @@ flask = "*"
 flask-wtf = "*"
 flask-httpauth = "*"
 flask-sqlalchemy = "*"
+flask-cors = "*"
+requests = "*"
+cymysql = "*"
 
 [requires]
 python_version = "3.7"
