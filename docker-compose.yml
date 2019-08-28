@@ -1,10 +1,26 @@
 version: "3"
 services:
+
+  db:
+    image: mysql:5.7
+    ports:
+     - "33060:3306"
+    volumes:
+     - ./db/mysql:/var/lib/mysql
+     - ./db/conf:/etc/mysql/mysql.conf.d
+     - ./db/file:/home
+    environment:
+     - MYSQL_DATABASE=flask
+     - MYSQL_ROOT_PASSWORD=dgbuaa
+     - MYSQL_USER=flask
+     - MYSQL_PASSWORD=flask.com
+    restart: always
+
   flask:
     image: python:3.7.3
     command: bash
     volumes:
-      - ../flask-server:/code
+     - ../flask-server:/code
     ports:
      - "8010:8010"
      - "8011:8011"
