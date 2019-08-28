@@ -5,17 +5,21 @@
 from sqlalchemy import Column, Integer, String, SmallInteger
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from app.libs.enums import ScopeEnum
 from app.libs.error_code import AuthFailed
 from app.models.base import Base, db
 from app.models.user_address import UserAddress
+from app.service.user_token import UserToken
 
 __author__ = 'lr'
 
 
 class User(Base):
     id = Column(Integer, primary_key=True)
-    email = Column(String(24), unique=True, nullable=False)
+    openid = Column(String(50), unique=True)
+	email = Column(String(24), unique=True)
     nickname = Column(String(24), unique=True)
+    extend = Column(String(255))
     # 区分管理员和普通用户，1为普通用户，2为管理员
     auth = Column(SmallInteger, default=1)
     _password = Column('password', String(100))
@@ -58,11 +62,30 @@ class User(Base):
             db.session.add(user)
 
     @staticmethod
-    def verify(email, password):
+    def register_by_wx(account):
+		with db.auto_commit():
+			user = User()
+			user.openid = account
+			db.session.add(user)
+		return User.query.filter_by(openid=account).first()
+
+    @staticmethod
+    def verify_by_email(email, password):
         user = User.query.filter_by(email=email).first_or_404()
         if not user.check_password(password):
             raise AuthFailed()
-            scope = 'AdminScope' if user.auth == 2 else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
+        scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
+		return {'uid': user.id, 'scope': scope}
+
+    @staticmethod
+	def verify_by_wx(code, *args):
+		ut = UserToken(code)
+		wx_result = ut.get()
+		openid = wx_result['openid']
+		user = User.query.filter_by(openid=openid).first()
+		if not user:
+			user = User.register_by_wx(openid)
+		scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope'
 		return {'uid': user.id, 'scope': scope}
  
     def check_password(self, raw):
