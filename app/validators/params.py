@@ -17,7 +17,7 @@ class IDMustBePositiveInt(BaseValidator):
 		id = value.data
 		if not self.isPositiveInteger(id):
 			raise ValidationError(message='id must be positive integer')
-		self.id.data = int(id)
+		self.id.data = id
 
 class IDCollection(BaseValidator):
 	ids = StringField(validators=[DataRequired()])
