@@ -15,24 +15,31 @@ __author__ = 'lr'
 
 
 class User(Base):
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     openid = Column(String(50), unique=True)
     email = Column(String(24), unique=True)
     nickname = Column(String(24), unique=True)
     extend = Column(String(255))
     # 区分管理员和普通用户，1为普通用户，2为管理员
     auth = Column(SmallInteger, default=1)
+    _user_address = db.relationship('UserAddress', backref='author', lazy='dynamic')
     _password = Column('password', String(100))
 
     # model中增加keys方法是为了在序列化时使用dict(xxx)方式序列化model
     # __getitem__也要加，不过统一加在父类Base中
     # 当keys返回的是tuple并且只有一个属性时记着别忘了加,，否则会得到这样一个错误Object has no attribute 'n'.
     def keys(self):
-        return ['id', 'email', 'nickname', 'auth'] # 返回的类型要是tuple,或者list等序列类型
+        # return ['id', 'email', 'nickname', 'auth'] # 返回的类型要是tuple,或者list等序列类型
+        self.hide('openid', '_password', 'extend').append('user_address')
+		return self.fields
 
     @property
     def password(self):
         return self._password
+
+	@property
+	def user_address(self):
+		return self._user_address.first()
 
     @password.setter
     def password(self, raw):
@@ -40,9 +47,10 @@ class User(Base):
 
     def save_address(self, address_info):
         with db.auto_commit():
-            address = UserAddress.query.filter_by(user_id=self.id).first()
+            # address = UserAddress.query.filter_by(user_id=self.id).first()
+            address = self._user_address.first()
             if not address:
-                address = UserAddress()
+                address = UserAddress(author=self)
             address.user_id = self.id
             address.name = address_info.name
             address.mobile = address_info.mobile
