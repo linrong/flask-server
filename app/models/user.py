@@ -31,15 +31,15 @@ class User(Base):
     def keys(self):
         # return ['id', 'email', 'nickname', 'auth'] # 返回的类型要是tuple,或者list等序列类型
         self.hide('openid', '_password', 'extend').append('user_address')
-		return self.fields
+        return self.fields
 
     @property
     def password(self):
         return self._password
 
-	@property
-	def user_address(self):
-		return self._user_address.first()
+    @property
+    def user_address(self):
+        return self._user_address.first()
 
     @password.setter
     def password(self, raw):
