@@ -4,6 +4,7 @@
 """
 
 from .app import Flask
+from flask_cors import CORS
 
 __author__ = 'lr'
 
@@ -18,6 +19,9 @@ def create_app():
     # 注册蓝图，有点像django中试视图和url的结合，不过这里是一起处理了的,而且这里使用自定义红图处理视图层函数,蓝图处理模块
     register_blueprint(app)
     register_plugin(app)
+    
+    cors = CORS()
+    cors.init_app(app, resources={"/*": {"origins": "*"}})
 
     return app
 
