@@ -26,6 +26,7 @@ def register_plugin(app):
     from app.models.base import db
     from flask_cors import CORS
 
+    # 解决跨域问题
     cors = CORS()
     cors.init_app(app, resources={"/*": {"origins": "*"}})
     db.init_app(app)
