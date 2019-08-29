@@ -5,7 +5,7 @@
 from flask import g
 
 from app.libs.error_code import DuplicateGift
-from app.libs.success_message  import RenewSuccess
+from app.libs.success_code  import RenewSuccess
 from app.libs.redprint import RedPrint
 from app.libs.token_auth import auth
 from app.models.base import db

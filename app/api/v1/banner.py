@@ -3,7 +3,7 @@
   Created by lr on 2019/8/9.
 """
 
-from app.libs.success_message  import Success
+from app.libs.success_code  import Success
 from app.libs.redprint import RedPrint
 from app.models.banner import Banner
 from app.validators.params import IDMustBePositiveInt

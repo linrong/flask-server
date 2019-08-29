@@ -2,8 +2,6 @@
 """
   Created by lr on 2019/8/9.
 """
-from flask import json
-from app.libs.utils import jsonify
 from app.libs.error import APIException
 
 __author__ = 'lr'
