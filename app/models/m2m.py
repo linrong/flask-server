@@ -22,7 +22,7 @@ class Product2Image(Base):
 	product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
 
 	def keys(self):
-		self.hide('img_id', 'product_id', 'order').append('img_url')
+		self.hide('id','img_id', 'product_id', 'order').append('img_url')
 		return self.fields
 
 	@property
