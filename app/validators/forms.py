@@ -58,11 +58,7 @@ class UserEmailValidator(ClientValidator):
     def validate_account(self, value):
         if User.query.filter_by(email=value.data).first():
             raise ValidationError()
-
-
-class BookSearchValidator(BaseValidator):
-    q = StringField(validators=[DataRequired()])
-
+            
 
 class AddressNew(BaseValidator):
     name = StringField(validators=[DataRequired()])
