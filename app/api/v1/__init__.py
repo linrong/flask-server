@@ -4,7 +4,7 @@
 """
 from flask import Blueprint
 
-from app.api.v1 import user, book, client, token, gift, \
+from app.api.v1 import user, client, token, \
 						banner, theme, product, category, \
 						address, order
 
@@ -15,10 +15,8 @@ def create_blueprint_v1():
 	# 自定义红图，用来拆分视图函数层，然后红图注册到蓝图，蓝图用来拆分模块
 	# 将红图注册进 蓝图bp_v1
 	user.api.register(bp_v1)
-	book.api.register(bp_v1)
 	client.api.register(bp_v1)
 	token.api.register(bp_v1)
-	gift.api.register(bp_v1)
 	banner.api.register(bp_v1)
 	theme.api.register(bp_v1)
 	product.api.register(bp_v1)
