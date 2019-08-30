@@ -9,24 +9,25 @@ from app.validators.params import IDCollection, IDMustBePositiveInt
 
 __author__ = 'lr'
 
-api = RedPrint('theme')
+api = RedPrint(name='theme', description='主题')
 
 @api.route('', methods=['GET'])
+@api.doc()
 def get_simple_list():
-	'''
+	'''一组 ID 的专题(Theme)
 	:url /theme
 	:arg /theme?ids=id1,id2,id3,...
 	:return: 一组theme模型
 	'''
-	# args = IDCollection().validate_for_api()
 	ids = IDCollection().validate_for_api().ids.data
 	theme = Theme.get_themes(ids=ids)
 	return Success(theme)
 
 
 @api.route('/<int:id>', methods=['GET'])
+@api.doc()
 def get_complex_one(id):
-	'''
+	'''专题(Theme)详情接口
 	Theme详情接口
 	:url /theme/:id
 	:param id: 专题theme的id

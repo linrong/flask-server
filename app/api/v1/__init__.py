@@ -24,3 +24,21 @@ def create_blueprint_v1():
 	address.api.register(bp_v1)
 	order.api.register(bp_v1)
 	return bp_v1
+
+def create_api_tags_v1():
+	'''
+	Swagger API 文档分类
+	数组中的顺序代表 Swagger 中的顺序
+	'''
+	return [
+		token.api.tag,
+		user.api.tag,
+		client.api.tag,
+		banner.api.tag,
+		theme.api.tag,
+		product.api.tag,
+		category.api.tag,
+		address.api.tag,
+		order.api.tag,
+		file.api.tag
+	]

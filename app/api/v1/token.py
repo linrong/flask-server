@@ -3,6 +3,8 @@
   Created by lr on 2019/8/9.
 """
 from flask import current_app
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
+	SignatureExpired, BadSignature
 
 from app.libs.enums import ClientTypeEnum
 from app.libs.error_code import AuthFailed
@@ -10,16 +12,16 @@ from app.libs.success_code  import Success
 from app.libs.redprint import RedPrint
 from app.models.user import User
 from app.validators.forms import ClientValidator, TokenValidator
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
-	SignatureExpired, BadSignature
 
 __author__ = 'lr'
 
-api = RedPrint('token')
+api = RedPrint(name='token', description='令牌')
 
 
 @api.route('/user', methods=['POST'])
+@api.doc()
 def get_token():
+    '''生成「令牌」'''
     # 获取token需要同时上传账号，密码，账号类型，即登录,数据的获取在ClientValidator的父类的init
     form = ClientValidator().validate_for_api()
     promise = {
@@ -44,8 +46,9 @@ def get_app_token():
 
 
 @api.route('/secret', methods=['POST'])
+@api.doc()
 def get_token_info():
-    """获取令牌信息"""
+    """解析「令牌」"""
     form = TokenValidator().validate_for_api()
     s = Serializer(current_app.config['SECRET_KEY'])
     try:
@@ -57,9 +60,10 @@ def get_token_info():
 
     r = {
         'scope': data[0]['scope'],
+        'uid': data[0]['uid'],
         'create_at': data[1]['iat'], # 创建时间
-        'expire_in': data[1]['exp'], # 有效期
-        'uid': data[0]['uid']
+        'expire_in': data[1]['exp'] # 有效期
+       
     }
     return Success(data=r)
 

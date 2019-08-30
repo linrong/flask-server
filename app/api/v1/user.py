@@ -12,7 +12,7 @@ from app.models.user import User
 
 __author__ = 'lr'
 
-api = RedPrint('user')
+api = RedPrint(name='user', description='用户')
 
 """
 装饰器的使用(https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584)
@@ -22,16 +22,28 @@ api = RedPrint('user')
 
 # 管理员
 @api.route('/<int:uid>', methods=['GET'])
+@api.doc()
 @auth.login_required
 def super_fetch_user(uid):
+	'''管理员获取用户信息'''
 	# user = User.query.get_or_404(uid) # 会查询到已经被删除的数据
 	user = User.query.filter_by(id=uid).first_or_404()
 	return Success(user)
 
 
+@api.route('/<int:uid>', methods=['POST'])
+@api.doc()
+@auth.login_required
+def super_update_user(uid):
+	'''管理员更新用户'''
+	pass
+
+
 @api.route('/<int:uid>', methods=['DELETE'])
+@api.doc()
 @auth.login_required
 def super_delete_user(uid):
+	'''管理员删除用户'''
 	with db.auto_commit():
 		# 取代user = User.query.get_or_404(uid)，即使删除了还是能查到
 		user = User.query.filter_by(id=uid).first_or_404()
@@ -40,21 +52,27 @@ def super_delete_user(uid):
 
 
 @api.route('', methods=['GET'])
+@api.doc()
 @auth.login_required
 def fetch_user():
+	'''用户获取信息'''
 	uid = g.user.uid  # g变量是「线程隔离」的
 	user = User.query.filter_by(id=uid).first_or_404()
 	return Success(user)
 
 
-@api.route('/<int:uid>', methods=['PUT'])
+@api.route('', methods=['PUT'])
+@api.doc()
 def update_user():
+	'''用户更新'''
 	return RenewSuccess()
 
 
 @api.route('', methods=['DELETE'])
+@api.doc()
 @auth.login_required
 def delete_user():
+	'''用户注销'''
 	uid = g.user.uid  # g变量是「线程隔离」的
 	with db.auto_commit():
 		# 取代user = User.query.get_or_404(uid)，即使删除了还是能查到

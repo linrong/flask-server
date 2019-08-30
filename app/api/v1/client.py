@@ -15,7 +15,7 @@ __author__ = 'lr'
 	1.注册类型可能会有很多种包括像Email注册, 手机号码注册, 第三方注册登录等，避免创建多个不同类型的注册路由
 	2.为登录和注册提供统一的接口
 '''
-api = RedPrint('client')
+api = RedPrint(name='client', description='客户端')
 
 
 @api.route('/register', methods=['POST'])
