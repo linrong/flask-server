@@ -4,6 +4,7 @@
 """
 __author__ = 'lr'
 
+from app.libs.token_auth import auth
 from app.libs.success_code  import Success,DeleteSuccess
 from app.libs.redprint import RedPrint
 from app.models.product import Product
@@ -39,6 +40,7 @@ def get_one(id):
 
 @api.route('/<int:id>', methods=['DELETE'])
 @api.doc()
+@auth.login_required
 def delete_one(id):
 	'''删除某商品'''
 	id = IDMustBePositiveInt().validate_for_api().id.data

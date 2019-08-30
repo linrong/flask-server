@@ -4,6 +4,7 @@
 """
 from app.libs.redprint import RedPrint
 from app.libs.success_code import Success
+from app.libs.token_auth import auth
 from app.validators.params import OrderPlace
 
 from flask import g
@@ -28,6 +29,7 @@ api = RedPrint(name='order', description='订单')
 
 @api.route('', methods=['POST'])
 @api.doc()
+@auth.login_required
 def place_order():
 	'''提交订单(管理员不能调用)'''
 	products = OrderPlace().validate_for_api().products.data
