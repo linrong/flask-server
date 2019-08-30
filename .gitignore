@@ -8,6 +8,9 @@
 !/app/static/files/.gitkeep
 !/app/static/images/.gitkeep
 
+# vscode
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
