@@ -4,7 +4,7 @@
 """
 from collections import namedtuple
 
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, FileField, MultipleFileField
 from wtforms.validators import DataRequired, length, Email, Regexp, ValidationError
 
 from app.libs.enums import ClientTypeEnum
@@ -58,7 +58,14 @@ class UserEmailValidator(ClientValidator):
     def validate_account(self, value):
         if User.query.filter_by(email=value.data).first():
             raise ValidationError()
-            
+
+class UploadFileValidator(BaseValidator):
+	# ref==> https://wtforms.readthedocs.io/en/latest/fields.html
+	file = FileField(validators=[DataRequired()])
+
+class UploadPDFValidator(BaseValidator):
+	origin = FileField(validators=[DataRequired()])
+	comparer = FileField(validators=[DataRequired()])        
 
 class AddressNew(BaseValidator):
     name = StringField(validators=[DataRequired()])
