@@ -2,6 +2,12 @@
 /db/mysql/*
 !db/mysql/.gitkeep
 
+# static
+/app/static/files/*
+/app/static/images/*
+!/app/static/files/.gitkeep
+!/app/static/images/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
