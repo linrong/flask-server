@@ -9,9 +9,9 @@ __author__ = 'lr'
 
 
 class APIException(HTTPException):
-	code = 500
-	msg = 'sorry, we make a mistake!'
-	error_code = 999
+	code = 500  # http 状态码
+	msg = 'sorry, we make a mistake!' # 异常信息
+	error_code = 999 # 约定的异常码
 
 	def __init__(self, code=None, error_code=None, msg=None, headers=None):
 		if code:

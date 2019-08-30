@@ -47,10 +47,10 @@ class ForbiddenException(APIException):
 	msg = 'forbidden, not in scope'
 
 
-class DuplicateGift(APIException):
+class DuplicateException(APIException):
 	code = 400
 	error_code = 2001
-	msg = 'the current book has already in gift'
+	msg = 'data duplication'
 
 
 class NotFound(APIException):
