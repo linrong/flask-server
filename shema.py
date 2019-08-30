@@ -3,6 +3,8 @@
   Created by lr on 2019/8/9.
 """
 from werkzeug.exceptions import HTTPException
+from werkzeug.middleware.proxy_fix import ProxyFix
+from flask_script import Manager, Server
 
 from app import create_app
 from app.libs.error import APIException
@@ -28,6 +30,14 @@ def framework_error(e):
         else:
             raise e
 
+# http://docs.jinkan.org/docs/flask/deploying/wsgi-standalone.html#deploying-proxy-setups
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
+manager = Manager(app)
+manager.add_command("run", Server())
+manager.add_command("runserver", Server(
+    use_debugger=True, use_reloader=True,
+    host='0.0.0.0', port=8010
+))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8010)
+    manager.run()
