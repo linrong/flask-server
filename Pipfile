@@ -14,6 +14,9 @@ flask-sqlalchemy = "*"
 flask-cors = "*"
 requests = "*"
 cymysql = "*"
+flasgger = "*"
+flask-script = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
