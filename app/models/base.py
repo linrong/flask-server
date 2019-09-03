@@ -61,22 +61,36 @@ class Query(BaseQuery):
 			raise NotFound()
 		return rv
 		
-	def all_or_404(self):
+	def all_or_404(self, e=None, error_code=None, msg=None):
 		rv = list(self)
 		if not rv:
-			raise NotFound()
+			if not rv:
+				if e:
+					raise e
+				raise NotFound(error_code=error_code, msg=msg)
 		return rv
 
-	def get_or_404(self, ident):
+	def get_or_404(self, ident, e=None, error_code=None, msg=None):
 		rv = self.get(ident)  # 查询主键
 		if not rv:
-			raise NotFound()
+			if e:
+				raise e
+			raise NotFound(error_code=error_code, msg=msg)
 		return rv
+
     # 重写修改错误的返回格式，此方法BaseQuery自带的
-	def first_or_404(self):
+	def first_or_404(self, e=None, error_code=None, msg=None):
+		'''
+		:param e: 异常(exception)
+		:param error_code: 错误码
+		:param msg: 错误信息
+		:return:
+		'''
 		rv = self.first()
 		if not rv:
-			raise NotFound()
+			if e:
+				raise e
+			raise NotFound(error_code=error_code, msg=msg)
 		return rv
 
 # 实例化SQLAlchemy对象并且重写query_class

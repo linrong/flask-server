@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, SmallInteger
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.libs.enums import ScopeEnum
-from app.libs.error_code import AuthFailed
+from app.libs.error_code import AuthFailed, UserException
 from app.models.base import Base, db
 from app.models.user_address import UserAddress
 from app.service.user_token import UserToken
@@ -79,9 +79,10 @@ class User(Base):
 
     @staticmethod
     def verify_by_email(email, password):
-        user = User.query.filter_by(email=email).first_or_404()
+        user = User.query.filter_by(email=email).first_or_404(
+			e=UserException(msg='该账号未注册'))
         if not user.check_password(password):
-            raise AuthFailed()
+            raise AuthFailed(msg='密码错误')
         scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope' # 判断用户是否为管理员,用于生成token时返回权限组信息添加到token处
         return {'uid': user.id, 'scope': scope}
 
