@@ -23,7 +23,8 @@ class Scope:
 class UserScope(Scope):
 	forbidden = ['v1.user+super_fetch_user', 'v1.user+super_delete_user',
 				 'v1.user+super_update_user']
-	allow_api = ['v1.order+place_order']
+	allow_api = ['v1.order+place_order'] + \
+				['v1.pay+get_pre_order']
 	def __init__(self):
 		# 利用内置的__add__方法叫做运算符重载
 		self + AdminScope()

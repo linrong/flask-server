@@ -5,6 +5,6 @@
 """
 from app.api_docs.v1 import user, client, token, \
 						banner, theme, product, category, \
-						address, order, file
+						address, order, file, pay
 
 __author__ = 'lr'
