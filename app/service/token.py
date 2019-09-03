@@ -3,6 +3,7 @@
   Created by lr on 2019/08/28.
 """
 from flask import current_app
+from flask import g
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
 	SignatureExpired, BadSignature
 
@@ -51,3 +52,10 @@ class Token():
 		}
 
 		return r 
+
+	@staticmethod
+	def is_valid_operate(checked_uid):
+		if not checked_uid:
+			raise Exception(msg='检测uid时，必须传入一个被检查的uid')
+		current_operate_uid = g.user.uid
+		return True if current_operate_uid == checked_uid else False 
