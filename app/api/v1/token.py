@@ -11,6 +11,7 @@ from app.libs.error_code import AuthFailed
 from app.libs.success_code  import Success
 from app.libs.redprint import RedPrint
 from app.models.user import User
+from app.service.token import Token
 from app.validators.forms import ClientValidator, TokenValidator
 
 __author__ = 'lr'
@@ -33,7 +34,7 @@ def get_token():
     identity = promise[ClientTypeEnum(form.type.data)](form.account.data, form.secret.data)
 	# Token生成
     expiration = current_app.config['TOKEN_EXPIRATION']
-    token = generate_auth_token(identity['uid'],
+    token = Token.generate_auth_token(identity['uid'],
                                 form.type.data,
                                 identity['scope'],
                                 expiration)
@@ -66,21 +67,3 @@ def get_token_info():
        
     }
     return Success(data=r)
-
-
-def generate_auth_token(uid, ac_type, scope=None, expiration=7200):
-    """
-    生成token，将用户的id，作用域，用户类型，过期时间写入token
-    :param uid: 用户id
-    :param ac_type: 用户类型
-    :param scope: 权限域
-    :param expiration: 过期时间 秒
-    :return:
-    """
-    s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
-    token = s.dumps({
-        'uid': uid,
-        'type': ac_type.value,
-        'scope': scope
-    })
-    return {'token': token.decode('ascii')}
