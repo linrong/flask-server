@@ -3,11 +3,8 @@
   Created by lr on 2019/8/9.
 """
 from flask import current_app
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
-	SignatureExpired, BadSignature
 
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_code import AuthFailed
 from app.libs.success_code  import Success
 from app.libs.redprint import RedPrint
 from app.models.user import User
@@ -33,7 +30,7 @@ def get_token():
     # 微信登录则account为code(需要微信小程序调用wx.login接口获取), secret为空
     identity = promise[ClientTypeEnum(form.type.data)](form.account.data, form.secret.data)
 	# Token生成
-    expiration = current_app.config['TOKEN_EXPIRATION']
+    expiration = current_app.config['TOKEN_EXPIRATION'] # token有效期
     token = Token.generate_auth_token(identity['uid'],
                                 form.type.data,
                                 identity['scope'],
@@ -50,20 +47,6 @@ def get_app_token():
 @api.doc()
 def get_token_info():
     """解析「令牌」"""
-    form = TokenValidator().validate_for_api()
-    s = Serializer(current_app.config['SECRET_KEY'])
-    try:
-        data = s.loads(form.token.data, return_header=True)
-    except SignatureExpired:
-        raise AuthFailed(msg='token is expired', error_code=1003)
-    except BadSignature:
-        raise AuthFailed(msg='token is invalid', error_code=1002)
-
-    r = {
-        'scope': data[0]['scope'],
-        'uid': data[0]['uid'],
-        'create_at': data[1]['iat'], # 创建时间
-        'expire_in': data[1]['exp'] # 有效期
-       
-    }
-    return Success(data=r)
+    token = TokenValidator().validate_for_api().token.data
+    result = Token.decrypt(token)
+    return Success(data=result)
