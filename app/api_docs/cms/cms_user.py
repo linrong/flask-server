@@ -1,6 +1,6 @@
 # _*_ coding: utf-8 _*_
 """
-  Created by lr on 2019/08/29.
+  Created by lr on 2019/09/04.
 """
 from app.libs.swagger_filed import StringPathFiled
 
@@ -16,8 +16,8 @@ uid_in_path = StringPathFiled(name='uid',
 							  default='0000aef0774f11e8ba9500163e0ce7e6',
 							  required=True).data
 
-fetch_user = {
-	"parameters": [],
+super_fetch_user = {
+	"parameters": [uid_in_path],
 	"security": [
 		{
 			"basicAuth": []
@@ -25,15 +25,15 @@ fetch_user = {
 	],
 	"responses": {
 		"200": {
-			"description": "用户获取自身信息",
+			"description": "管理员获取用户信息",
 			"examples": {
 			}
 		}
 	}
 }
 
-update_user = {
-	"parameters": [],
+super_update_user = {
+	"parameters": [uid_in_path],
 	"security": [
 		{
 			"basicAuth": []
@@ -41,15 +41,15 @@ update_user = {
 	],
 	"responses": {
 		"200": {
-			"description": "用户修改信息",
+			"description": "管理员修改用户信息",
 			"examples": {
 			}
 		}
 	}
 }
 
-delete_user = {
-	"parameters": [],
+super_delete_user = {
+	"parameters": [uid_in_path],
 	"security": [
 		{
 			"basicAuth": []
@@ -57,7 +57,18 @@ delete_user = {
 	],
 	"responses": {
 		"200": {
-			"description": "用户注销",
+			"description": "管理员注销用户",
+			"examples": {
+			}
+		}
+	}
+}
+
+super_test = {
+	"parameters": [],
+	"responses": {
+		"200": {
+			"description": "测试",
 			"examples": {
 			}
 		}

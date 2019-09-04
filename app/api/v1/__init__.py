@@ -6,7 +6,7 @@ from flask import Blueprint
 
 from app.api.v1 import user, client, token, \
 						banner, theme, product, category, \
-						address, order, file, pay
+						address, order, pay
 
 __author__ = 'lr'
 
@@ -23,7 +23,6 @@ def create_blueprint_v1():
 	category.api.register(bp_v1)
 	address.api.register(bp_v1)
 	order.api.register(bp_v1)
-	file.api.register(bp_v1)
 	pay.api.register(bp_v1)
 	return bp_v1
 
@@ -42,6 +41,5 @@ def create_api_tags_v1():
 		category.api.tag,
 		address.api.tag,
 		order.api.tag,
-		file.api.tag,
 		pay.api.tag,
 	]

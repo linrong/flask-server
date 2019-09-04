@@ -7,7 +7,7 @@ __author__ = 'lr'
 from functools import wraps
 from flasgger import swag_from
 
-from app.api_docs import v1
+from app import api_docs
 
 # 创建自定义红图对象
 
@@ -61,7 +61,7 @@ class RedPrint:
 	'''
     def doc(self, *_args, **_kwargs):
         def decorator(f):
-            api_doc = getattr(v1, self.name)
+            api_doc = getattr(api_docs, self.name)
             specs = getattr(api_doc, f.__name__)
             specs['tags'] = [self.name]
             # 对f.__doc__处理
