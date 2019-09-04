@@ -23,9 +23,9 @@ def get_token():
     # 获取token需要同时上传账号，密码，账号类型，即登录,数据的获取在ClientValidator的父类的init
     form = ClientValidator().validate_for_api()
     promise = {
-        ClientTypeEnum.USER_EMAIL: User.verify_by_email,
-        ClientTypeEnum.USER_WX: User.verify_by_wx,
-        ClientTypeEnum.USER_WX_OPEN: User.verify_by_wx_open
+        ClientTypeEnum.USER_EMAIL: User.verify_by_email, # 邮箱&密码登录
+        ClientTypeEnum.USER_WX: User.verify_by_wx, # 微信小程序登录
+        ClientTypeEnum.USER_WX_OPEN: User.verify_by_wx_open # 微信开发平台登录(微信扫码登录)
     }
     # 判断用户是否存在并返回信息
     # 微信登录则account为code(需要微信小程序调用wx.login接口获取), secret为空
