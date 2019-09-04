@@ -2,7 +2,7 @@
 """
   Created by lr on 2019/08/29.
 """
-from flask import render_template, redirect
+from flask import render_template, redirect, url_for
 from . import web
 
 __author__ = 'lr'
@@ -13,3 +13,8 @@ def index():
     '''默认跳转的 API 文档'''
     return redirect('/apidocs/#/')
     # return render_template("index.html")
+
+@web.route('/doc')
+def doc():
+    '''跳转'''
+    return redirect(url_for('web.index')) 

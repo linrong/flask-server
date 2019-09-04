@@ -71,11 +71,19 @@ class User(Base):
 
     @staticmethod
     def register_by_wx(account):
+        '''
+        在SQLAlchemy中一个Session（可以看作）是一个transaction，每个操作（基本上）对应一条或多条SQL语句，这些SQL语句需要发送到数据库服务器才能被真正执行，
+        而整个transaction需要commit才能真正生效，如果没提交，一旦你的程序挂了，所有未提交的事务都会被回滚到事务开始之前的状态。
+        flush就是把客户端尚未发送到数据库服务器的SQL语句发送过去，预提交，等于提交到数据库内存，还未写入数据库文件,commit就是告诉数据库服务器提交事务,把内存里面的东西直接写入。
+        简单说，flush之后你才能在这个Session中看到效果，而commit之后你才能从其它Session中看到效果。
+        '''
         with db.auto_commit():
             user = User()
             user.openid = account
             db.session.add(user)
-        return User.query.filter_by(openid=account).first()
+        # db.session.flush()
+        return user
+        # return User.query.filter_by(openid=account).first()
 
     @staticmethod
     def verify_by_email(email, password):
@@ -89,9 +97,10 @@ class User(Base):
     @staticmethod
     def verify_by_wx(code, *args):
         ut = UserToken(code)
-        wx_result = ut.get()
+        wx_result = ut.get() # wx_result = {session_key, expires_in, openid}
         openid = wx_result['openid']
         user = User.query.filter_by(openid=openid).first()
+        # 如果不在数据库，则新建用户
         if not user:
             user = User.register_by_wx(openid)
         scope = 'AdminScope' if user.auth == ScopeEnum.Admin else 'UserScope'

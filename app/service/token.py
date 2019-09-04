@@ -39,10 +39,10 @@ class Token():
 		s = Serializer(current_app.config['SECRET_KEY'])
 		try:
 			data = s.loads(token, return_header=True)
-		except SignatureExpired:
-			raise AuthFailed(msg='token is expired', error_code=1003)
 		except BadSignature:
 			raise AuthFailed(msg='token is invalid', error_code=1002)
+		except SignatureExpired:
+			raise AuthFailed(msg='token is expired', error_code=1003)
 
 		r = {
 			'scope': data[0]['scope'], # 用户权限
@@ -56,6 +56,12 @@ class Token():
 	@staticmethod
 	def is_valid_operate(checked_uid):
 		if not checked_uid:
-			raise Exception(msg='检测uid时，必须传入一个被检查的uid')
+			# todo
+			raise Exception('检测uid时，必须传入一个被检查的uid')
 		current_operate_uid = g.user.uid
-		return True if current_operate_uid == checked_uid else False 
+		return True if current_operate_uid == checked_uid else False
+
+	@staticmethod
+	def get_current_token_var(key):
+		'''获取缓存中的变量'''
+		pass  

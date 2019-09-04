@@ -14,11 +14,15 @@ from app.libs.scope import is_in_scope
 
 __author__ = 'lr'
 
-# 使用的是HTTPBasicAuth认证，暂时不清楚和HTTPTokenAuth有什么区别
-# 不过上传的数据和生成的token有点不一样
-# 上传的头文件：Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-# 获取到的token: "eyJhbGcioiJIUzUx...."
-# 这两个之间的使用需要调研下,链接(http://www.bjhee.com/flask-ext9.html)
+"""
+使用的是HTTPBasicAuth认证，暂时不清楚和HTTPTokenAuth有什么区别
+不过上传的数据和生成的token有点不一样
+上传的头文件：Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+获取到的token: "eyJhbGcioiJIUzUx...."
+这两个之间的使用需要调研下,链接(http://www.bjhee.com/flask-ext9.html)
+使用Postman中Authorization 设置使用 Basic Auth
+使用Flassger中securityDefinitions 设置使用 basicAuth (详见config/setting.py)
+"""
 auth = HTTPBasicAuth() 
 User = namedtuple('User', ['uid', 'ac_type', 'scope'])
 

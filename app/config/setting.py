@@ -11,12 +11,13 @@ SERVER_URL = '172.16.50.143:8010'
 IMG_PREFIX = SERVER_URL + '/static/images'
 # 使用时os.path.join(UPLOAD_FOLDER)
 UPLOAD_FOLDER = 'app/static/uploads'
+VERSION = "0.0.1" # 项目版本
 
 SWAGGER = {
 	"swagger_version": "2.0",
 	"info": {
 		"title": "Flask RESTful API",
-		"version": "0.0.1",
+		"version": VERSION,
 		"description": "A simple API to learn how to write OpenAPI Specification",
 		"contact": {
 			"responsibleOrganization": "Shema",
