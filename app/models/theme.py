@@ -10,17 +10,6 @@ from app.models.image import Image
 
 __author__ = 'lr'
 
-
-def empty_interceptor(f):
-	def decorator(id):
-		try:
-			f(id)
-		except Exception:
-			raise ThemeException()
-
-	return decorator
-
-
 class Theme(Base):
 	__tablename__ = 'theme'
 	id = Column(Integer, primary_key=True, autoincrement=True)

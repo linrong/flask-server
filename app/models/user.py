@@ -31,7 +31,7 @@ class User(Base):
     # __getitem__也要加，不过统一加在父类Base中
     # 当keys返回的是tuple并且只有一个属性时记着别忘了加,，否则会得到这样一个错误Object has no attribute 'n'.
     def keys(self):
-        # return ['id', 'email', 'nickname', 'auth'] # 返回的类型要是tuple,或者list等序列类型
+        # 返回的类型要是tuple,或者list等序列类型
         self.hide('openid', 'unionid', '_password', 'extend').append('user_address')
         return self.fields
 
@@ -50,7 +50,7 @@ class User(Base):
     def save_address(self, address_info):
         with db.auto_commit():
             # address = UserAddress.query.filter_by(user_id=self.id).first()
-            address = self._user_address.first()
+            address = self.user_address
             if not address:
                 address = UserAddress(author=self)
             address.user_id = self.id
@@ -71,6 +71,7 @@ class User(Base):
             user.email = account
             user.password = secret
             db.session.add(user)
+        return user
 
     @staticmethod
     def register_by_wx(account):
@@ -84,21 +85,18 @@ class User(Base):
             user = User()
             user.openid = account
             db.session.add(user)
-            db.session.flush()
         return user
 
     @staticmethod
     def register_by_wx_open(user_info):
         """微信第三方注册"""
-        img_filename = HTTP.download_pic(user_info['headimgurl'], type='avatar')
         with db.auto_commit():
             user = User()
             user.openid = user_info['openid']
             user.unionid = user_info['unionid']
             user.nickname = user_info['nickname']
-            # user.avatar = img_filename
+            user.avatar = user_info['headimgurl']
             db.session.add(user)
-            db.session.flush()
         return user
 
     @staticmethod
