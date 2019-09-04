@@ -11,6 +11,7 @@ __author__ = 'lr'
 
 
 class UserToken:
+	'''微信·小程序的Token获取'''
 	def __init__(self, code):
 		self.code = code
 		self.wx_app_id = current_app.config['APP_ID']

@@ -19,12 +19,13 @@ api = RedPrint(name='token', description='令牌')
 @api.route('/user', methods=['POST'])
 @api.doc()
 def get_token():
-    '''生成「令牌」'''
+    '''生成「令牌」(3种登录方式)'''
     # 获取token需要同时上传账号，密码，账号类型，即登录,数据的获取在ClientValidator的父类的init
     form = ClientValidator().validate_for_api()
     promise = {
         ClientTypeEnum.USER_EMAIL: User.verify_by_email,
         ClientTypeEnum.USER_WX: User.verify_by_wx,
+        ClientTypeEnum.USER_WX_OPEN: User.verify_by_wx_open
     }
     # 判断用户是否存在并返回信息
     # 微信登录则account为code(需要微信小程序调用wx.login接口获取), secret为空
@@ -38,9 +39,15 @@ def get_token():
     return Success(data=token)
 
 
-@api.route('/app', methods=['POST'])
-def get_app_token():
-	pass
+@api.route('/open_redirect_url', methods=['GET'])
+@api.doc()
+def get_open_redirect_url():
+	'''
+	微信授权跳转链接
+	用于前端弹出微信扫描页面，获取code
+	:return: 跳转的链接，用于弹出「微信扫描页面」
+	'''
+	return Success(data={'redirect_url': current_app.config['OPEN_AUTHORIZE_URL']})
 
 
 @api.route('/secret', methods=['POST'])

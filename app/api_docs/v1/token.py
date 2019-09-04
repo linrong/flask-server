@@ -11,7 +11,7 @@ get_token = {
 		{
 			"name": "body",
 			"in": "body",
-			"description": "登录的基本信息: 账号、密码、登录类型",
+			"description": '''登录的基本信息: 账号、密码、登录类型\n邮箱账号登录(type:100)\n小程序登录(type:200)\n微信扫码登录(type:201)''',
 			"require": "true",
 			"schema": {
 				"id": "Token",
@@ -82,6 +82,21 @@ get_token_info = {
 					"expire_in": 1547734403,
 					"scope": "UserScope",
 					"uid": "0017be56959511e8b34700163e0ce7e6"
+				},
+				"error_code": 0
+			}
+		}
+	}
+}
+
+get_open_redirect_url = {
+	"parameters": [],
+	"responses": {
+		"200": {
+			"description": "获取成功",
+			"examples": {
+				"data": {
+					"auth_url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx87186e0123456789&redirect_uri=https%3a%2f%2fapi.izjgk.com%2ftoken%2fuser&response_type=code&scope=snsapi_login&state=3d6be0a4035d839573b04816624a415e#wechat_redirect"
 				},
 				"error_code": 0
 			}
