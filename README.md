@@ -43,16 +43,22 @@ python_version = "3.7"
 # 安装库
 pipenv install flask
 ```
-#### 运行
+#### 使用
 ```bash
 # 使用docker-compose.yml方式运行
 # 端口映射8010，访问本机地址8010即可
 
 python shema.py run -h 0.0.0.0 -p 8010 # 已过期
 # 使用flask-scrip启动
-pipenv run python shema.py runserver
+pipenv run python manage.py runserver
 # 使用Gunicorn启动
-pipenv run gunicorn -w 4 -b 0.0.0.0:8010 shema:app
+pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
+
+# 注册和登录
+目前提供三种登录方式
+1.邮箱
+2.微信小程序
+3.微信第三方登录
 ```
 
 #### 模块
@@ -62,7 +68,9 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 shema:app
 * 数据(异常处理，数据的序列化，数据的检查)
 * 访问认证和权限划分
 * model和orm
-* flask
+* flask模块
+* swagger
+* wx
 
 #### 接口文档
 * [Swagger](https://swagger.io/) 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。
