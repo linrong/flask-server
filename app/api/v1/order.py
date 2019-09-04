@@ -42,6 +42,7 @@ def place_order():
 
 @api.route('/<int:id>', methods=['GET'])
 @api.doc()
+@auth.login_required
 def get_detail():
 	'''pass'''
 	pass
@@ -49,6 +50,7 @@ def get_detail():
 
 @api.route('/by_user', methods=['GET'])
 @api.doc()
+@auth.login_required
 def get_summary_by_user():
 	'''按用户查询'''
 	page = 1

@@ -32,6 +32,7 @@ def fetch_user():
 
 @api.route('', methods=['PUT'])
 @api.doc()
+@auth.login_required
 def update_user():
 	'''用户更新'''
 	return RenewSuccess()
