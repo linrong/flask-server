@@ -2,8 +2,11 @@
 """
   Created by lr on 2019/09/03.
 """
+from flask import g
+
 from app.libs.enums import OrderStatusEnum
 from app.libs.error_code import OrderException, TokenException
+from app.models.user import User
 from app.service.order import Order as OrderService
 from app.service.token import Token
 from app.models.order import Order as OrderModel
@@ -14,13 +17,13 @@ class Pay():
 	order_id = None
 	order_no = None
 
- 	def __init__(self, order_id):
+	def __init__(self, order_id):
 		if not order_id:
 			# todo
 			raise Exception('订单号不允许为NULL') # '订单号不允许为NULL'
 		self.order_id = order_id
 
- 	def pay(self):
+	def pay(self):
 		# 检测订单情况
 		self.__check_order_valid()
 		# 支付前，再次进行库存量检测
@@ -28,9 +31,23 @@ class Pay():
 		status = order_service.check_order_stock(self.order_id)
 		if not status['pass']:
 			return status
+		return self.__make_wx_pre_order(status['order_price'])
 	
-	def __make_wx_pre_order(self):
-		pass
+	def __make_wx_pre_order(self, order_price):
+		user = User.query.filter_by(id=g.user.uid).first_or_404()
+		openid = user.openid
+		if not openid:
+			# openid不存在
+			pass
+		wx_order_data = None
+		return self.__get_pay_signature(wx_order_data)
+
+	def __get_pay_signature(self, wx_order_data):
+		'''签名'''
+		wx_order = None
+		if wx_order['return_code'] != 'SUCCESS' or wx_order['result_code'] != 'SUCCESS':
+			pass # 记录到日志里
+		return None
 
 	def __check_order_valid(self):
 		'''对订单作三种情况的检测'''

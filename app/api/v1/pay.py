@@ -5,16 +5,19 @@
 """
 from app.libs.redprint import RedPrint
 from app.libs.token_auth import auth
+from app.service.pay import Pay as PayService
 from app.validators.params import IDMustBePositiveInt
 
 __author__ = 'lr'
 
 api = RedPrint(name='pay', description='支付')
 
-@api.route('pre_order', methods=['POST'])
+@api.route('/pre_order', methods=['POST'])
 @api.doc()
 @auth.login_required
 def get_pre_order():
 	'''获取预订单'''
-	id = IDMustBePositiveInt().validate_for_api().id.data
+	order_id = IDMustBePositiveInt().validate_for_api().id.data
+	pay = PayService(order_id)
+	pay.pay()
 	pass
