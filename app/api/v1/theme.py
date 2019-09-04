@@ -2,6 +2,7 @@
 """
   Created by lr on 2019/8/9.
 """
+from app.libs.limiter import cached
 from app.libs.success_code  import Success
 from app.libs.redprint import RedPrint
 from app.models.theme import Theme
@@ -13,6 +14,7 @@ api = RedPrint(name='theme', description='主题')
 
 @api.route('', methods=['GET'])
 @api.doc()
+@cached()
 def get_simple_list():
 	'''一组 ID 的专题(Theme)
 	:url /theme
@@ -26,6 +28,7 @@ def get_simple_list():
 
 @api.route('/<int:id>', methods=['GET'])
 @api.doc()
+@cached()
 def get_complex_one(id):
 	'''专题(Theme)详情接口
 	Theme详情接口

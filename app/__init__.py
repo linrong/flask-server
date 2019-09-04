@@ -33,7 +33,7 @@ def register_plugin(app):
     # db.create_all()方法只能在Flask核心对象的上下文栈中才会起作用. 所以我们要用with调用Flask核心对象的app_context()方法将其推入Flask核心对象的上下文栈中
     with app.app_context():
         # 如果数据库表已经存在于数据库中, 那么 db.create_all() 不会创建或更新这个表
-        db.create_all()
+        db.create_all() # 首次模型映射(ORM ==> SQL),若无则建表; 初始化使用
     
     # Debug模式下可以查阅 API文档
     if app.config['DEBUG']:

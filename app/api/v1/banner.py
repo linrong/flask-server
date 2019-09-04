@@ -5,7 +5,6 @@
 
 from app.libs.success_code  import Success
 from app.libs.redprint import RedPrint
-from app.libs.limiter import cached
 from app.models.banner import Banner
 from app.validators.params import IDMustBePositiveInt
 
@@ -16,7 +15,6 @@ api = RedPrint(name='banner', description='首页轮播图')
 
 @api.route('/<int:id>', methods=['GET'])
 @api.doc()
-@cached()
 def get_banner(id):
 	'''获取「首页轮播图」'''
 	id = IDMustBePositiveInt().validate_for_api().id.data
