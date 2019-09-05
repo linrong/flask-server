@@ -5,9 +5,10 @@
 
 from contextlib import contextmanager
 from datetime import datetime
-from flask import current_app
-from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy, BaseQuery
+from flask import current_app, json
+from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy, Pagination as _Pagination, BaseQuery
 from sqlalchemy import Column, SmallInteger, Integer, orm, inspect
+from time import localtime, strftime
 
 from app.libs.error_code import NotFound
 
@@ -45,6 +46,12 @@ class SQLAlchemy(_SQLAlchemy):
 			yield
 		except Exception:
 			raise e
+
+class Pagination(_Pagination):
+	def hide(self, *keys):
+		for item in self.items:
+			item.hide(*keys)
+		return self
 
 
 class Query(BaseQuery):
@@ -93,6 +100,15 @@ class Query(BaseQuery):
 			raise NotFound(error_code=error_code, msg=msg)
 		return rv
 
+	def paginate(self, page=None, per_page=None, error_out=True, max_per_page=None):
+		paginate = BaseQuery.paginate(self, page=page, per_page=per_page, error_out=error_out, max_per_page=max_per_page)
+		return Pagination(self,
+						  paginate.page,
+						  paginate.per_page,
+						  paginate.total,
+						  paginate.items
+						  )
+
 # 实例化SQLAlchemy对象并且重写query_class
 # flask里面通过flask_sqlalchemy快速使用SQLAlchemy
 # SQLAlchemy是python对于数据库的orm库
@@ -119,13 +135,24 @@ class Base(db.Model):
 		# inspect()函数是SQLAlchemy的公共API的入口点，用于查看内存中对象的配置和构造。根据传递给inspect()的对象的类型，返回值可以是提供已知接口的相关对象，或者在许多情况下它将返回对象本身
 		all_columns = inspect(self.__class__).columns.keys() # 例如相当于获取到User.colums.keys()
 		self.fields = list(set(all_columns) - set(self.exclude)) # 设置self.fields,用于确定每个model要返回什么字段数据，什么字段数据不返回？
+		self.hide_fields = [] # 被隐藏的属性则无法用append方法添加
 
 	def __init__(self):
 		self.create_time = int(datetime.now().timestamp()) # 存储int型时间戳 
     
 	# 用于序列化时使用dict(xxx)方式序列化model
 	def __getitem__(self, item):
-		return getattr(self, item)
+		attr = getattr(self, item)
+		# 将字符串转为JSON
+		if isinstance(attr, str):
+			try:
+				attr = json.loads(attr)
+			except ValueError:
+				pass
+		# 处理时间(时间戳转化)
+		if item in ['create_time', 'update_time', 'delete_time']:
+			attr = strftime('%Y-%m-%d %H:%M:%S', localtime(attr))
+		return attr
     
 	# 装饰器，将装饰的方法可以按照属性使用（get,set）
 	@property
@@ -141,10 +168,10 @@ class Base(db.Model):
 		else:
 			return url
 
-	def set_attrs(self, attrs_dict):
+	def set_attrs(self, **kwargs):
 		# 快速赋值
 		# 用法: set_attrs(form.data)
-		for key, value in attrs_dict.items():
+		for key, value in kwargs.items():
 			if hasattr(self, key) and key != 'id':
 				setattr(self, key, value)
 
@@ -152,14 +179,22 @@ class Base(db.Model):
 		self.status = 0
 
 	def keys(self):
+		# 在 app/app.py中的 JSONEncoder中的 dict(o)使用
+		# 在此处，整合要输出的属性：self.fields
 		return self.fields
 
 	def hide(self, *keys):
 		for key in keys:
-			self.fields.remove(key)
+			self.hide_fields.append(key)
+			if key in self.fields:
+				self.fields.remove(key)
 		return self
 
 	def append(self, *keys):
 		for key in keys:
-			self.fields.append(key)
+			# self.fields 暂未有key 
+			# and
+			# 在 Model层和 Service层等任意的操作中，已经隐藏的属性无法再添加
+			if key not in self.fields and key not in self.hide_fields:
+				self.fields.append(key)
 		return self

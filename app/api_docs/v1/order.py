@@ -2,6 +2,8 @@
 """
   Created by lr on 2019/08/30.
 """
+from app.libs.swagger_filed import IntegerPathFiled, IntegerQueryFiled
+
 __author__ = 'lr'
 
 '''
@@ -10,6 +12,9 @@ __author__ = 'lr'
 "type": 'object'时
 	-可以使用 properties
 '''
+id_in_path = IntegerPathFiled(
+	name='id', description="订单ID", enum=[1, 2, 3, 4, 5, 10, 15, 20], default=1, required=True).data
+
 place_order = {
 	"parameters": [
 		{
@@ -69,17 +74,32 @@ place_order = {
 }
 
 get_detail = {
-	"parameters": [],
+	"parameters": [
+		id_in_path
+	],
+	"security": [
+		{
+			"basicAuth": []
+		}
+	],
 	"responses": {
 		"200": {
-			"description": "产品分类",
+			"description": "订单详情",
 			"examples": {}
 		}
 	}
 }
 
 get_summary_by_user = {
-	"parameters": [],
+	"parameters":  [
+		IntegerQueryFiled(name='page', description="第几页", enum=[1, 2, 3, 4, 5], default=1).data,
+		IntegerQueryFiled(name='size', description="每页数量", enum=[5, 10, 20, 30, 40, 50, 100], default=10).data
+	],
+	"security": [
+		{
+			"basicAuth": []
+		}
+	],
 	"responses": {
 		"200": {
 			"description": "产品分类",

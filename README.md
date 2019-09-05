@@ -91,4 +91,5 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 * [labike.github.io](https://github.com/labike/labike.github.io/issues/45)
 * [mini-shop-server](https://github.com/Allen7D/mini-shop-server)
 * [flask-restful-example](https://github.com/qzq1111/flask-restful-example)
-* [python+Django实现微信小程序支付功能](https://blog.csdn.net/qq_34493908/article/details/81190057)
+* [python+Django实现微信小程序支付功能(不用SDK)](https://blog.csdn.net/qq_34493908/article/details/81190057)
+* [wechatpy(微信的第三方 Python SDK) 使用文档](http://docs.wechatpy.org/zh_CN/master/index.html)

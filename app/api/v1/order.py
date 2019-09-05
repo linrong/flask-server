@@ -6,7 +6,9 @@ from app.libs.redprint import RedPrint
 from app.libs.success_code import Success
 from app.libs.token_auth import auth
 from app.service.order import Order as OrderService
-from app.validators.params import OrderPlace
+from app.models.order import Order as OrderModel
+from app.validators.forms import PaginateValidator
+from app.validators.params import OrderPlace, IDMustBePositiveInt
 
 from flask import g
 """
@@ -43,27 +45,32 @@ def place_order():
 @api.route('/<int:id>', methods=['GET'])
 @api.doc()
 @auth.login_required
-def get_detail():
-	'''pass'''
-	pass
+def get_detail(id):
+	'''订单详情'''
+	id = IDMustBePositiveInt().validate_for_api().id.data
+	order = OrderModel.query.get_or_404(id).hide('prepay_id')
+	return Success(order)
 
 
 @api.route('/by_user', methods=['GET'])
 @api.doc()
 @auth.login_required
 def get_summary_by_user():
-	'''按用户查询'''
-	page = 1
-	size = 15
-	pass
+	'''订单摘要: 按用户查询&分页'''
+	validator = PaginateValidator().validate_for_api()
+	page = validator.page.data
+	size = validator.size.data
+	paging_orders = OrderModel.get_summary_by_user(g.user.uid, page, size)
+	return Success(paging_orders)
 
 
 @api.route('/paginate', methods=['GET'])
 @api.doc()
 def get_summary():
 	'''分页查询'''
-	page = 1
-	size = 20
+	validator = PaginateValidator().validate_for_api()
+	page = validator.page.data
+	size = validator.size.data
 	pass
 
 
