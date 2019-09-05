@@ -43,16 +43,26 @@ python_version = "3.7"
 # 安装库
 pipenv install
 ```
-#### 开发使用
+#### 使用
+> 目前代码中提供的wx和setting的某配置是不可用的，使用者须更换为自己的配置
 ```bash
+# 开发使用
 # 使用docker-compose.yml方式运行
 # 端口映射8010，访问本机地址8010即可
 
+# 启动flask和mysql容器
+docker-compose up -d
+# 进入flask容器运行flask-server启动命令
 python shema.py run -h 0.0.0.0 -p 8010 # 已过期
 # 使用flask-scrip启动
 pipenv run python manage.py runserver
 # 使用Gunicorn启动
 pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
+
+# 如果不使用docker进行开发和部署，可用:
+1.安装mysql，修改setting中数据库连接的url为自己数据库的配置
+2.pipenv install 安装包
+3.正常启动flask=server启动命令
 
 # 注册和登录
 目前提供三种登录方式
@@ -63,6 +73,7 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 #### 部署
 * 使用[docker-nginx](https://github.com/linrong/docker-nginx)([nginx-proxy](https://github.com/jwilder/nginx-proxy)+[docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion))作为ssl认证和反向代理服务器，进行ssl的自动配置和容器的动态接入和移除，另外作为静态文件服务器
 * 使用flask+gunicorn运行后端服务器，通过容器编排进行容器间的通信
+
 #### 模块
 > 主要按照在使用的技术可以划分的模块
 * 视图(包括自定义红图和蓝图)
@@ -102,5 +113,6 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 * [lin-cms-flask](https://github.com/TaleLin/lin-cms-flask)
 
 ### 最后
+有问题请[issue](https://github.com/linrong/flask-server/issues)提问。
 
 如果觉得还不错的话，就给个 [Star](https://github.com/linrong/flask-server) ⭐️ 鼓励一下我吧~
