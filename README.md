@@ -41,9 +41,9 @@ verify_ssl = true
 python_version = "3.7"
 
 # 安装库
-pipenv install flask
+pipenv install
 ```
-#### 使用
+#### 开发使用
 ```bash
 # 使用docker-compose.yml方式运行
 # 端口映射8010，访问本机地址8010即可
@@ -60,9 +60,11 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 2.微信小程序
 3.微信第三方登录
 ```
-
+#### 部署
+* 使用[docker-nginx](https://github.com/linrong/docker-nginx)([nginx-proxy](https://github.com/jwilder/nginx-proxy)+[docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion))作为ssl认证和反向代理服务器，进行ssl的自动配置和容器的动态接入和移除，另外作为静态文件服务器
+* 使用flask+gunicorn运行后端服务器，通过容器编排进行容器间的通信
 #### 模块
-> 主要按照在使用的技术中占多大比例划分
+> 主要按照在使用的技术可以划分的模块
 * 视图(包括自定义红图和蓝图)
 * 配置
 * 数据(异常处理，数据的序列化，数据的检查)
@@ -71,6 +73,10 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 * flask模块
 * swagger
 * wx
+
+> 架构
+
+![项目架构](./media/project.png)
 
 #### 接口文档
 * [Swagger](https://swagger.io/) 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。
@@ -84,7 +90,7 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 * AOP(面向切面编程)设计，实现参数校验层&异常统一处理层
 * 更灵活的 API文档生成方式
 
-#### 参考
+#### 参考资料
 * [Flask 上传文件](https://dormousehole.readthedocs.io/en/latest/patterns/fileuploads.html)
 * [Nginx的https配置记录以及http强制跳转到https的方法梳理](https://www.cnblogs.com/kevingrace/p/6187072.html)
 * [深入Python Flask构建Restful API 或者 慕课网 Python Flask构建可扩展的 ESTful API](https://www.os4team.cn/)
@@ -93,3 +99,8 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 * [flask-restful-example](https://github.com/qzq1111/flask-restful-example)
 * [python+Django实现微信小程序支付功能(不用SDK)](https://blog.csdn.net/qq_34493908/article/details/81190057)
 * [wechatpy(微信的第三方 Python SDK) 使用文档](http://docs.wechatpy.org/zh_CN/master/index.html)
+* [lin-cms-flask](https://github.com/TaleLin/lin-cms-flask)
+
+### 最后
+
+如果觉得还不错的话，就给个 [Star](https://github.com/linrong/flask-server) ⭐️ 鼓励一下我吧~
