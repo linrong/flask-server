@@ -94,6 +94,9 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 * 本项目使用[flasgger库](https://github.com/rochacbruno/flasgger)自动生成 Swagger风格[(Demo)](https://editor.swagger.io/?_ga=2.211085136.492521077.1539840591-1920768432.1536803925)的API文档。
 * [Swagger Editor](http://editor.swagger.io/) 在网页端直接编辑 API文档
 * 查阅API文档
+* 对第三方库Flasgger的swag_from装饰器进行了功能的扩展
+具体查看[redprint.py的doc函数](https://github.com/linrong/flask-server/blob/master/app/libs/redprint.py#L62)
+
 > 在浏览器端输入：http://localhost:8010/apidocs/#/
 
 #### 特色
@@ -103,6 +106,7 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 
 #### 参考资料
 * [Flask 上传文件](https://dormousehole.readthedocs.io/en/latest/patterns/fileuploads.html)
+* [Flask 文件上传](https://zhuanlan.zhihu.com/p/23731819?refer=flask)
 * [Nginx的https配置记录以及http强制跳转到https的方法梳理](https://www.cnblogs.com/kevingrace/p/6187072.html)
 * [深入Python Flask构建Restful API 或者 慕课网 Python Flask构建可扩展的 ESTful API](https://www.os4team.cn/)
 * [labike.github.io](https://github.com/labike/labike.github.io/issues/45)

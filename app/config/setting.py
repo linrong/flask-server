@@ -9,9 +9,18 @@ TOKEN_EXPIRATION = 30 * 24 * 3600
 # 配置本地存储图片的url前缀，云上的默认为整个连接
 SERVER_URL = '172.16.50.143:8010'
 IMG_PREFIX = SERVER_URL + '/static/images'
-# 使用时os.path.join(UPLOAD_FOLDER)
-UPLOAD_FOLDER = 'app/static/uploads'
+
 VERSION = "0.0.1" # 项目版本
+
+# 文件相关配置
+FILE = {
+    "STORE_DIR": 'app/static/files',
+    "SINGLE_LIMIT": 1024 * 1024 * 2,
+    "TOTAL_LIMIT": 1024 * 1024 * 20,
+    "NUMS": 10,
+    "INCLUDE": set(['jpg', 'png', 'jpeg','pdf']),
+    "EXCLUDE": set([])
+}
 
 SWAGGER = {
 	"swagger_version": "2.0",

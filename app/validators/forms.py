@@ -3,7 +3,10 @@
   Created by lr on 2019/8/9.
 """
 from collections import namedtuple
+import os
 
+from flask import current_app
+from werkzeug.datastructures import FileStorage
 from wtforms import StringField, IntegerField, FileField, MultipleFileField
 from wtforms.validators import DataRequired, length, Email, Regexp, ValidationError
 
@@ -59,13 +62,33 @@ class UserEmailValidator(ClientValidator):
         if User.query.filter_by(email=value.data).first():
             raise ValidationError()
 
-class UploadFileValidator(BaseValidator):
-	# ref==> https://wtforms.readthedocs.io/en/latest/fields.html
-	file = FileField(validators=[DataRequired()])
 
-class UploadPDFValidator(BaseValidator):
-	origin = FileField(validators=[DataRequired()])
-	comparer = FileField(validators=[DataRequired()])        
+class UploadFileValidator(BaseValidator):
+    origin = FileField(validators=[DataRequired()])
+    comparer = FileField(validators=[DataRequired()])
+    description = StringField(validators=[DataRequired()])
+
+    def get_size(self,file_obj: FileStorage):
+        """
+        得到文件大小（字节）
+        :param file_obj: 文件对象
+        :return: 文件的字节数
+        """
+        file_obj.seek(0, os.SEEK_END)
+        size = file_obj.tell()
+        file_obj.seek(0)  # 将文件指针重置
+        return size
+
+    def validate_origin(self,value):
+        default_config = current_app.config.get('FILE')
+        if value.data:
+            # 判断文件格式
+            if '.' not in value.data.filename or \
+                value.data.filename.rsplit('.', 1)[1] not in default_config['INCLUDE']:
+                raise ValidationError('文件格式错误')
+            if self.get_size(value.data) >  default_config['SINGLE_LIMIT']:
+                raise ValidationError('文件大小错误')
+
 
 class AddressNew(BaseValidator):
     name = StringField(validators=[DataRequired()])
