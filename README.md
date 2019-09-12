@@ -89,6 +89,28 @@ pipenv run gunicorn -w 4 -b 0.0.0.0:8010 manage:app
 
 ![项目架构](./media/project.png)
 
+##### [flask-migrate](https://github.com/miguelgrinberg/flask-migrate)
+> 用于数据库的更新，回退，和django的使用差不多
+```bash
+# 第一次进行迁移
+pipenv run python manage.py db init  # 初始化迁移文件,系统默认生成migrate文件夹
+pipenv run python manage.py db migrate -m "initial migration"  # 检查模型字段是否修改,如果改变,就产生新的迁移文件.
+pipenv run python manage.py db upgrade # 对迁移文件进行迁移
+
+# 其他迁移
+pipenv run python manage.py db migrate -m "xxxx"  # 检查模型字段是否修改,如果改变,就产生新的迁移文件.
+pipenv run python manage.py db upgrade # 对迁移文件进行迁移
+
+# 回退
+pipenv run python manage.py db history # 查看历史版本，得到history-id
+pipenv run python manage.py db downgrade history-id # 回退到指定历史版本
+
+# db的处理
+pipenv run python manage.py shell
+from app.models.base import db
+db.drop_all()
+```
+
 #### 接口文档
 * [Swagger](https://swagger.io/) 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。
 * 本项目使用[flasgger库](https://github.com/rochacbruno/flasgger)自动生成 Swagger风格[(Demo)](https://editor.swagger.io/?_ga=2.211085136.492521077.1539840591-1920768432.1536803925)的API文档。

@@ -5,10 +5,12 @@
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_script import Manager, Server
+from flask_migrate import Migrate, MigrateCommand
 
 from app import create_app
 from app.libs.error import APIException
 from app.libs.error_code import ServerError
+from app.models.base import db
 
 __author__ = 'lr'
 
@@ -39,5 +41,11 @@ manager.add_command("runserver", Server(
     use_debugger=True, use_reloader=True,
     host='0.0.0.0', port=8010
 ))
+
+# 要使用flask-migrate，必须先绑定db和app
+migrate = Migrate(app, db)
+# 将MigrateCommand添加到manager中，"db"是自定义命令
+manager.add_command("db", MigrateCommand)
+
 if __name__ == '__main__':
     manager.run()
